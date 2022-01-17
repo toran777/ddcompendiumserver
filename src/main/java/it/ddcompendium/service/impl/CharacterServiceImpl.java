@@ -19,9 +19,9 @@ public class CharacterServiceImpl implements CharacterService {
 		try {
 			connection = DatabaseConnection.getConnection();
 			CharacterRepositoryImpl repository = new CharacterRepositoryImpl(connection);
-			Character character = new Character();
-			character.setIdUser(id);
-			result = repository.findAll(character);
+			Character c = new Character();
+			c.setId(id);
+			result = repository.findAll(c);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServiceException(-1, "Server Error, try again later");
@@ -65,5 +65,27 @@ public class CharacterServiceImpl implements CharacterService {
 			connection.commit();
 			connection.close();
 		}
+	}
+
+	@Override
+	public Character findOne(Integer id) throws Exception {
+		Connection connection = null;
+		Character result = null;
+
+		try {
+			connection = DatabaseConnection.getConnection();
+			CharacterRepositoryImpl repository = new CharacterRepositoryImpl(connection);
+			Character c = new Character();
+			c.setId(id);
+			result = repository.findOne(c);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(-1, "Server Error, try again later");
+		} finally {
+			connection.commit();
+			connection.close();
+		}
+
+		return result;
 	}
 }

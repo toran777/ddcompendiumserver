@@ -14,48 +14,52 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import it.ddcompendium.repository.entities.Recommendation;
 import it.ddcompendium.repository.entities.Spell;
+import it.ddcompendium.repository.entities.User;
 import it.ddcompendium.responses.ListResponse;
 import it.ddcompendium.responses.Status;
 import it.ddcompendium.responses.StatusResponse;
-import it.ddcompendium.service.SpellService;
-import it.ddcompendium.service.impl.SpellServiceImpl;
+import it.ddcompendium.service.RecommendService;
+import it.ddcompendium.service.impl.RecommendServiceImpl;
 import it.ddcompendium.utils.Utils;
 
-@WebServlet("/Spell")
-public class SpellsServlet extends HttpServlet {
+@WebServlet("/Recommend")
+public class RecommendServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private SpellService service = new SpellServiceImpl();
+	private RecommendService service = new RecommendServiceImpl();
 
-	public SpellsServlet() {
+	public RecommendServlet() {
 		super();
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Integer offset = Integer.parseInt(request.getParameter("offset"));
+		Integer id = Integer.parseInt(request.getParameter("id"));
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
 
-		ListResponse<Spell> sResponse = new ListResponse<>();
+		ListResponse<Recommendation> rResponse = new ListResponse<>();
 		Status status = null;
 
 		try {
-			List<Spell> spells = service.findAll(offset);
-			sResponse.setData(spells);
+			List<Recommendation> recommendations = service.findAll(id);
+			rResponse.setData(recommendations);
 			status = new Status(0, "done");
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = new Status(-1, e.getMessage());
 		}
 
-		sResponse.setStatus(status);
-		String json = new Gson().toJson(sResponse);
+		rResponse.setStatus(status);
+		String json = new Gson().toJson(rResponse);
 		writer.print(json);
 		writer.flush();
 	}
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		StatusResponse sResponse = new StatusResponse();
@@ -66,14 +70,22 @@ public class SpellsServlet extends HttpServlet {
 		String string = Utils.read(request.getReader());
 		JsonObject object = JsonParser.parseString(string).getAsJsonObject();
 
-		Integer idCharacter = object.get("idCharacter").getAsInt();
-		Integer idSpell = object.get("idSpell").getAsInt();
+		Recommendation recommendation = new Recommendation();
+		User by = new User();
+		by.setId(object.get("by_id").getAsInt());
+		User to = new User();
+		to.setId(object.get("to_id").getAsInt());
+		Spell spell = new Spell();
+		spell.setId(object.get("spell_id").getAsInt());
+		recommendation.setRecommendation(spell);
+		recommendation.setRecommendedBy(by);
+		recommendation.setRecommendedTo(to);
 
 		Status status = null;
 
 		try {
-			service.addSpell(idCharacter, idSpell);
-			status = new Status(0, "done");
+			service.insert(recommendation);
+			status = new Status(0, "Recommendation sent");
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = new Status(-1, e.getMessage());
@@ -92,14 +104,13 @@ public class SpellsServlet extends HttpServlet {
 
 		PrintWriter writer = resp.getWriter();
 
-		Integer idCharacter = Integer.parseInt(req.getParameter("idCharacter"));
-		Integer idSpell = Integer.parseInt(req.getParameter("idSpell"));
+		Integer id = Integer.parseInt(req.getParameter("id"));
 
 		Status status = null;
 
 		try {
-			service.deleteSpell(idCharacter, idSpell);
-			status = new Status(0, "done");
+			service.delete(id);
+			status = new Status(0, "Recommendation deleted successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = new Status(-1, e.getMessage());

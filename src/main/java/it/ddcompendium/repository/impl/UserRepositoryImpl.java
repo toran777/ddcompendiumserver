@@ -9,8 +9,9 @@ import java.util.List;
 
 import it.ddcompendium.repository.CrudRepository;
 import it.ddcompendium.repository.entities.User;
+import it.ddcompendium.utils.SQLQueries;
 
-public class UserRepositoryImpl implements CrudRepository<User> {
+public class UserRepositoryImpl implements CrudRepository<User>, SQLQueries {
 	private Connection connection;
 
 	public UserRepositoryImpl(Connection connection) {
@@ -24,8 +25,7 @@ public class UserRepositoryImpl implements CrudRepository<User> {
 		User result = null;
 
 		try {
-			statement = connection
-					.prepareStatement("SELECT * FROM utenti WHERE (username = ? OR email = ?) AND password = ?");
+			statement = connection.prepareStatement(GET_USER);
 			statement.setString(1, t.getUsername());
 			statement.setString(2, t.getUsername());
 			statement.setString(3, t.getPassword());
@@ -55,7 +55,7 @@ public class UserRepositoryImpl implements CrudRepository<User> {
 		List<User> result = new ArrayList<>();
 
 		try {
-			statement = connection.prepareStatement("SELECT * FROM utenti");
+			statement = connection.prepareStatement(GET_ALL_USERS);
 
 			set = statement.executeQuery();
 
@@ -81,7 +81,7 @@ public class UserRepositoryImpl implements CrudRepository<User> {
 		PreparedStatement statement = null;
 
 		try {
-			statement = connection.prepareStatement("INSERT INTO utenti(username, email, password) VALUES (?, ?, ?)");
+			statement = connection.prepareStatement(INSERT_USER);
 			statement.setString(1, t.getUsername());
 			statement.setString(2, t.getEmail());
 			statement.setString(3, t.getPassword());
@@ -102,6 +102,32 @@ public class UserRepositoryImpl implements CrudRepository<User> {
 	@Override
 	public void delete(Integer id) throws Exception {
 		// TODO Auto-generated method stub
+	}
+
+	public User search(String query) throws Exception {
+		PreparedStatement statement = null;
+		ResultSet set = null;
+		User result = null;
+
+		try {
+			statement = connection.prepareStatement(FIND_USER_BY_USERNAME);
+			statement.setString(0, query);
+
+			set = statement.executeQuery();
+
+			while (set.next()) {
+				result = new User();
+				result.setId(set.getInt("id"));
+				result.setUsername(set.getString("username"));
+			}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			statement.close();
+			set.close();
+		}
+
+		return result;
 	}
 
 }

@@ -1,21 +1,25 @@
 package it.ddcompendium.utils;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
-	private static final String DB_URL = "jdbc:mysql://2.239.18.210:12345/ddcompendium";
-	private static final String USERNAME = "sincrono";
-	private static final String PASSWORD = "password";
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
-	public static Connection getConnection() throws SQLException {
+public class DatabaseConnection {
+
+	public static Connection getConnection() throws SQLException, NamingException {
 		Connection connection = null;
 
 		try {
-			connection = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+			Context initContext = new InitialContext();
+			Context envContext = (Context) initContext.lookup("java:/comp/env");
+			DataSource dataSource = (DataSource) envContext.lookup("jdbc/ddcompendium");
+			connection = dataSource.getConnection();
 			connection.setAutoCommit(false);
-		} catch (SQLException e) {
+		} catch (NamingException e) {
 			throw e;
 		}
 

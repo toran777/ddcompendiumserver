@@ -12,15 +12,16 @@ import it.ddcompendium.utils.DatabaseConnection;
 public class SpellServiceImpl implements SpellService {
 
 	@Override
-	public List<Spell> findAll() throws Exception {
+	public List<Spell> findAll(Integer offset) throws Exception {
 		Connection connection = null;
 		List<Spell> result = null;
 
 		try {
 			connection = DatabaseConnection.getConnection();
 			SpellRepositoryImpl repository = new SpellRepositoryImpl(connection);
-			result = repository.findAll(null);
+			result = repository.findAll(offset);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ServiceException(-1, "Server Error, try again later");
 		} finally {
 			connection.commit();
@@ -60,6 +61,26 @@ public class SpellServiceImpl implements SpellService {
 			connection.commit();
 			connection.close();
 		}
+	}
+
+	@Override
+	public List<Spell> search(String query) throws Exception {
+		Connection connection = null;
+		List<Spell> result = null;
+
+		try {
+			connection = DatabaseConnection.getConnection();
+			SpellRepositoryImpl repository = new SpellRepositoryImpl(connection);
+			result = repository.search(query);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(-1, "Server Error, try again later");
+		} finally {
+			connection.commit();
+			connection.close();
+		}
+
+		return result;
 	}
 
 }

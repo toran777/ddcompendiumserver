@@ -20,62 +20,46 @@ import it.ddcompendium.service.UserService;
 import it.ddcompendium.service.impl.UserServiceImpl;
 import it.ddcompendium.utils.Utils;
 
-@WebServlet("/User")
-public class UserServlet extends HttpServlet {
+@WebServlet("/QueryUser")
+public class QueryUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private UserService service = new UserServiceImpl();
 
-	public UserServlet() {
+	public QueryUser() {
+		super();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Response<User> resultResponse = new Response<>();
+		Response<User> sResponse = new Response<>();
 		response.setContentType("application/json");
+
 		PrintWriter writer = response.getWriter();
 
 		String string = Utils.read(request.getReader());
 		JsonObject object = JsonParser.parseString(string).getAsJsonObject();
 
-		User user = new User();
-		user.setUsername(object.get("username").getAsString());
-		user.setPassword(object.get("password").getAsString());
-
-		String action = object.get("action").getAsString();
+		String query = object.get("query").getAsString();
 
 		Status status = null;
 
 		try {
-			switch (action) {
-			case "registration":
-				user.setEmail(object.get("email").getAsString());
-				service.insert(user);
-				status = new Status(0, "Registration successful");
-				break;
-			case "login":
-				User exists = service.findOne(user);
-
-				if (exists != null) {
-					resultResponse.setData(exists);
-					status = new Status(0, "Welcome " + exists.getUsername());
-				} else {
-					status = new Status(-2, "Invalid username or password");
-				}
-
-				break;
-			}
+			User user = service.search(query);
+			sResponse.setData(user);
+			status = new Status(0, "done");
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = new Status(-1, e.getMessage());
 		}
 
-		resultResponse.setStatus(status);
-		String json = new Gson().toJson(resultResponse);
+		sResponse.setStatus(status);
+		String json = new Gson().toJson(sResponse);
 		writer.print(json);
 		writer.flush();
 	}

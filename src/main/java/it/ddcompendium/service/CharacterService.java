@@ -10,4 +10,6 @@ public interface CharacterService {
 	public void insert(Character character) throws Exception;
 
 	public void delete(Integer id) throws Exception;
+	
+	public Character findOne(Integer id) throws Exception;
 }

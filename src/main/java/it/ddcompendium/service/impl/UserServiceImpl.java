@@ -51,4 +51,24 @@ public class UserServiceImpl implements UserService {
 		return exists;
 	}
 
+	@Override
+	public User search(String query) throws Exception {
+		Connection connection = null;
+		User result = null;
+
+		try {
+			connection = DatabaseConnection.getConnection();
+			UserRepositoryImpl repository = new UserRepositoryImpl(connection);
+			result = repository.search(query);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(-1, "Server Error, try again later");
+		} finally {
+			connection.commit();
+			connection.close();
+		}
+
+		return result;
+	}
+
 }

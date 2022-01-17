@@ -6,4 +6,6 @@ public interface UserService {
 	public User findOne(User user) throws Exception;
 
 	public void insert(User user) throws Exception;
+
+	public User search(String query) throws Exception;
 }

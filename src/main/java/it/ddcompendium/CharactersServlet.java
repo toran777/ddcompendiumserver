@@ -15,7 +15,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import it.ddcompendium.repository.entities.Character;
-import it.ddcompendium.responses.CharactersStatusResponse;
+import it.ddcompendium.responses.ListResponse;
 import it.ddcompendium.responses.Status;
 import it.ddcompendium.responses.StatusResponse;
 import it.ddcompendium.service.CharacterService;
@@ -38,12 +38,12 @@ public class CharactersServlet extends HttpServlet {
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
 
-		CharactersStatusResponse cResponse = new CharactersStatusResponse();
+		ListResponse<Character> cResponse = new ListResponse<>();
 		Status status = null;
 
 		try {
 			List<Character> characters = service.findAll(id);
-			cResponse.setCharacters(characters);
+			cResponse.setData(characters);
 			status = new Status(0, "done");
 		} catch (Exception e) {
 			e.printStackTrace();
