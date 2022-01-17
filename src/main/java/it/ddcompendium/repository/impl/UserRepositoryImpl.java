@@ -111,7 +111,7 @@ public class UserRepositoryImpl implements CrudRepository<User>, SQLQueries {
 
 		try {
 			statement = connection.prepareStatement(FIND_USER_BY_USERNAME);
-			statement.setString(0, query);
+			statement.setString(1, query);
 
 			set = statement.executeQuery();
 

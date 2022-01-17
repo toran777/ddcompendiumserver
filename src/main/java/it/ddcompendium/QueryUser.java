@@ -51,8 +51,15 @@ public class QueryUser extends HttpServlet {
 
 		try {
 			User user = service.search(query);
+
+			if (user != null) {
+				sResponse.setData(user);
+				status = new Status(0, "User found");
+			} else {
+				status = new Status(-1, "No user was found with this username");
+			}
+
 			sResponse.setData(user);
-			status = new Status(0, "done");
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = new Status(-1, e.getMessage());

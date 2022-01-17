@@ -71,9 +71,9 @@ public class RecommendServlet extends HttpServlet {
 
 		Recommendation recommendation = new Recommendation();
 		User by = new User();
-		by.setId(object.get("by_id").getAsInt());
+		by.setId(object.get("user_by").getAsInt());
 		User to = new User();
-		to.setId(object.get("to_id").getAsInt());
+		to.setId(object.get("user_to").getAsInt());
 		Spell spell = new Spell();
 		spell.setId(object.get("spell_id").getAsInt());
 		recommendation.setRecommendation(spell);
