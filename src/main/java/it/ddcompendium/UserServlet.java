@@ -49,16 +49,23 @@ public class UserServlet extends HttpServlet {
 		String action = object.get("action").getAsString();
 
 		Status status = null;
-
+		User exists = null;
+		
 		try {
 			switch (action) {
 			case "registration":
 				user.setEmail(object.get("email").getAsString());
-				service.insert(user);
-				status = new Status(0, "Registration successful");
+				exists = service.findOne(user);
+				
+				if (exists == null) {
+					service.insert(user);
+					status = new Status(0, "Registration successful");
+				} else {
+					status = new Status(-1, "There is already an user with these credentials");
+				}
 				break;
 			case "login":
-				User exists = service.findOne(user);
+				exists = service.findOne(user);
 
 				if (exists != null) {
 					resultResponse.setData(exists);

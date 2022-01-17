@@ -49,7 +49,6 @@ public class RecommendServlet extends HttpServlet {
 			rResponse.setData(recommendations);
 			status = new Status(0, "done");
 		} catch (Exception e) {
-			e.printStackTrace();
 			status = new Status(-1, e.getMessage());
 		}
 

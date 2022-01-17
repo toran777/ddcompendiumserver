@@ -39,7 +39,7 @@ public class RecommendationRepositoryImpl implements CrudRepository<Recommendati
 
 		try {
 			statement = connection.prepareStatement(GET_RECOMMENDATIONS_USER);
-			statement.setInt(0, id);
+			statement.setInt(1, id);
 			set = statement.executeQuery();
 
 			while (set.next()) {
