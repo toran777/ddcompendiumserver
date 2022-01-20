@@ -1,52 +1,38 @@
 package it.ddcompendium.repository.entities;
 
+import com.google.gson.JsonObject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Character {
-	private int id;
-	private String name;
-	private String classe;
-	private List<Spell> spells;
-	private int idUser;
+    private int id;
+    private String name;
+    private String classe;
+    private List<Spell> spells;
+    private int idUser;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getClasse() {
-		return classe;
-	}
-
-	public void setClasse(String classe) {
-		this.classe = classe;
-	}
-
-	public List<Spell> getSpells() {
-		return spells;
-	}
-
-	public void setSpells(List<Spell> spells) {
-		this.spells = spells;
-	}
-
-	public int getIdUser() {
-		return idUser;
-	}
-
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
-	}
-
+    public Character(JsonObject object) {
+        for (String s : object.keySet()) {
+            switch (s) {
+                case "id":
+                    this.id = object.get(s).getAsInt();
+                    break;
+                case "name":
+                    this.name = object.get(s).getAsString();
+                    break;
+                case "classe":
+                    this.classe = object.get(s).getAsString();
+                    break;
+                case "idUser":
+                    this.idUser = object.get(s).getAsInt();
+                    break;
+            }
+        }
+    }
 }

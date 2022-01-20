@@ -1,32 +1,13 @@
 package it.ddcompendium.responses;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Status {
-	private int code;
-	private String message;
-
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public Status(int code, String message) {
-		super();
-		this.code = code;
-		this.message = message;
-	}
-
-	public Status() {
-	}
-
+    private int code;
+    private String message;
 }

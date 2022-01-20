@@ -2,15 +2,18 @@ package it.ddcompendium.repository;
 
 import java.util.List;
 
-public interface CrudRepository<T> {
+public abstract class CrudRepository<T> {
+    protected T findOne(T t) throws Exception {
+        return null;
+    }
 
-	public T findOne(T t) throws Exception;
+    protected List<T> findAll(T t) throws Exception {
+        return null;
+    }
 
-	public List<T> findAll(T t) throws Exception;
+    protected void insert(T t) throws Exception {
+    }
 
-	public void insert(T t) throws Exception;
-
-	public void update(T t) throws Exception;
-
-	public void delete(Integer id) throws Exception;
+    protected void delete(Integer id) throws Exception {
+    }
 }

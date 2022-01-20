@@ -1,15 +1,15 @@
 package it.ddcompendium.service;
 
-import java.util.List;
-
 import it.ddcompendium.repository.entities.Spell;
 
+import java.util.List;
+
 public interface SpellService {
-	public List<Spell> findAll(Integer offset) throws Exception;
+    List<Spell> findAll(Integer offset) throws Exception;
 
-	public void addSpell(Integer idCharcter, Integer idSpell) throws Exception;
+    void addSpell(Integer idCharacter, Integer idSpell) throws Exception;
 
-	public void deleteSpell(Integer idCharcter, Integer idSpell) throws Exception;
+    void deleteSpell(Integer idCharacter, Integer idSpell) throws Exception;
 
-	public List<Spell> search(String query) throws Exception;
+    List<Spell> search(String query) throws Exception;
 }

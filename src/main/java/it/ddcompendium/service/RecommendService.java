@@ -1,13 +1,13 @@
 package it.ddcompendium.service;
 
-import java.util.List;
-
 import it.ddcompendium.repository.entities.Recommendation;
 
+import java.util.List;
+
 public interface RecommendService {
-	public List<Recommendation> findAll(Integer id) throws Exception;
+    List<Recommendation> findAll(Integer id) throws Exception;
 
-	public void insert(Recommendation recommendation) throws Exception;
+    void insert(Recommendation recommendation) throws Exception;
 
-	public void delete(Integer id) throws Exception;
+    void delete(Integer id) throws Exception;
 }

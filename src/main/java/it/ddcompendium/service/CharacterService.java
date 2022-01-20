@@ -1,15 +1,15 @@
 package it.ddcompendium.service;
 
-import java.util.List;
-
 import it.ddcompendium.repository.entities.Character;
 
+import java.util.List;
+
 public interface CharacterService {
-	public List<Character> findAll(Integer id) throws Exception;
+    List<Character> findAll(Integer id) throws Exception;
 
-	public void insert(Character character) throws Exception;
+    void insert(Character character) throws Exception;
 
-	public void delete(Integer id) throws Exception;
-	
-	public Character findOne(Integer id) throws Exception;
+    void delete(Integer id) throws Exception;
+
+    Character findOne(Integer id) throws Exception;
 }
